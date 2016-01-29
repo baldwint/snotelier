@@ -1,0 +1,13 @@
+{% from "_formhelpers.html" import render_field %}
+ {% extends "base.html" %}
+ {% block body %}
+<h1>Mt. Hood Avalanche condition</h1>
+<p>Select a date and time for which to estimate avalanche warning</p>
+<form method=post action="/app">
+  <dl>
+      {# {{ render_field(form.username) }} #}
+    {{ render_field(form.date) }}
+  </dl>
+  <p><input type=submit value=Register>
+</form>
+ {% endblock %}

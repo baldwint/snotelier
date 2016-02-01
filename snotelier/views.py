@@ -19,12 +19,6 @@ host = 'localhost'
 dbname = 'avy'
 db = sa.create_engine('postgres://%s@%s/%s'%(user,host,dbname))
 
-@app.route('/')
-@app.route('/index')
-def index():
-    user = dict(name='Miguel')
-    return render_template("hello.html", title='Home', user=user)
-
 @app.route('/db')
 def birth_page():
     sql_query = """
@@ -55,7 +49,8 @@ def relevant_nwac_reports(date):
     return query_results
 
 
-@app.route('/app', methods=['GET', 'POST'])
+@app.route('/')
+@app.route('/result', methods=['GET', 'POST'])
 def estimate():
     form = TheForm(request.form)
     if request.method == 'POST' and form.validate():
@@ -67,9 +62,10 @@ def estimate():
         our_estimate = model_to_date(date)
         relevant_nwac = relevant_nwac_reports(date)
         return render_template('result.html', params=params,
+                title = "Estimate for {date}".format(date=date),
                 result = relevant_nwac.to_html(),
                 score=str(our_estimate))
-    return render_template('app.html', form=form)
+    return render_template('app.html', form=form, title='Snotelier')
 
 def arrange_plot(aw, ah, n=1):
     w,h = aw+1, ah+1

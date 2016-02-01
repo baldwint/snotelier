@@ -2,12 +2,19 @@
  {% extends "base.html" %}
  {% block body %}
 <h1>Mt. Hood Avalanche condition</h1>
-<p>Select a date and time for which to estimate avalanche warning</p>
-<form method=post action="/app">
+<p>Select a date for which to estimate avalanche warning</p>
+<form method=post action="/result">
   <dl>
       {# {{ render_field(form.username) }} #}
     {{ render_field(form.date) }}
   </dl>
-  <p><input type=submit value=Register>
+  <p><input type=submit value=Estimate>
 </form>
+
+<p>In the future:</p>
+<ul>
+    <li>Map widget (select locations besides mount hood)</li>
+    <li>More accurate results</li>
+</ul>
+
  {% endblock %}

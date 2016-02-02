@@ -1,6 +1,8 @@
 {% from "_formhelpers.html" import render_field %}
  {% extends "base.html" %}
  {% block body %}
+
+<div class="left">
 <h1>Mt. Hood Avalanche condition</h1>
 <p>Select a date for which to estimate avalanche warning</p>
 <form method=post action="/result">
@@ -16,5 +18,23 @@
     <li>Map widget (select locations besides mount hood)</li>
     <li>More accurate results</li>
 </ul>
+</div>
+
+<div class="right" id="map"></div>
+    <script type="text/javascript">
+
+var map;
+function initMap() {
+  map = new google.maps.Map(document.getElementById('map'), {
+    center: {lat: 45., lng: -122.},
+    zoom: 8,
+    mapTypeId: google.maps.MapTypeId.TERRAIN
+  });
+}
+
+    </script>
+    <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDf-2FzxiGrpKbYf4I8MHo5scacVlTMtvU&callback=initMap">
+    </script>
 
  {% endblock %}

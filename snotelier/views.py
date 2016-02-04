@@ -12,7 +12,7 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
 from flask import make_response
 
-from .model import get_usda_data, model_to_date
+from .model import get_usda_daily, model_to_date
 
 user = 'tkb'
 host = 'localhost'
@@ -77,9 +77,8 @@ def estimate():
                 lat=form.lat.data,
                 lng=form.lng.data,
                 )
-        print(params)
         nearby_snotels = nearest_snotels(params['lat'], params['lng'])
-        our_estimate = model_to_date(date)
+        our_estimate = model_to_date(651, 'OR', date)
         relevant_nwac = relevant_nwac_reports(date)
         return render_template('result.html', params=params,
                 title = "Estimate for {date}".format(date=date),
@@ -109,7 +108,8 @@ def gen_image(date):
     axes[-1].set_title(str(date))
     # fill in data
     date = pd.to_datetime(date)
-    df = get_usda_data(date - pd.Timedelta('1 day'),
+    df = get_usda_daily(651, 'OR',
+                       date - pd.Timedelta('1 day'),
                        date + pd.Timedelta('1 day'),)
     df['Snow Water Equivalent (in)'].plot(ax=axes[0], legend=True)
     df['Snow Depth (in)'].plot(ax=axes[1], legend=True)

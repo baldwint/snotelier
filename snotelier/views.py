@@ -32,6 +32,8 @@ class TheForm(wtforms.Form):
     #username = wtforms.TextField('Username',
     #        [wtforms.validators.Length(min=4, max=25)])
     date = DateField('Date', format='%Y-%m-%d')
+    lat = wtforms.FloatField('Lat', id='lat')
+    lng = wtforms.FloatField('Lng', id='lng')
 
 def relevant_nwac_reports(date):
     before = date - pd.Timedelta('2 days')
@@ -58,13 +60,16 @@ def estimate():
         params = dict(
                 #name=form.username.data,
                 date=date,
+                lat=form.lat.data,
+                lng=form.lng.data,
                 )
         our_estimate = model_to_date(date)
         relevant_nwac = relevant_nwac_reports(date)
         return render_template('result.html', params=params,
                 title = "Estimate for {date}".format(date=date),
                 result = relevant_nwac.to_html(),
-                score=str(our_estimate))
+                score=str(our_estimate)
+                )
     return render_template('app.html', form=form, title='Snotelier')
 
 def arrange_plot(aw, ah, n=1):

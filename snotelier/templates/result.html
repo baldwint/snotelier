@@ -1,6 +1,7 @@
  {% extends "base.html" %}
  {% block body %}
 <h1>Mt. Hood Conditions estimate for {{params.date}}</h1>
+<p>You clicked {{params.lat}} and {{params.lng}}</p>
 <p>Our estimate:</p>
 <h1 class="score {{score|lower}}">{{score}}</h1>
 <p>NWAC reports for this time period:</p>

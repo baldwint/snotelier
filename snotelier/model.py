@@ -66,8 +66,8 @@ def get_usda_daily(site, range_min, range_max, state='WA'):
     # as far as I can tell, dates are in pacific time. No idea whether DST is accounted for
     df['datetime_loc'] = pd.to_datetime(df['Date'])
     #df['date_utc'] = pd.to_datetime(df['Date'] + ' PST')
-    df = df.set_index('datetime_loc')
-    return df, collabels, url
+    df = df.set_index('datetime_loc').drop('Date', axis=1)
+    return df #, collabels, url
 
 def make_engineered_daily(df):
     temps = ['TMAX_value', 'TMIN_value', 'TAVG_value',]
@@ -80,10 +80,10 @@ def make_engineered_daily(df):
     dfe = df[current]
 
     #these throw a bunch of warnings but I think it's ok
-    dfe['TAVG_yest'] = df['TAVG_value'].shift(-1) # avg temp yesterday
-    dfe['SNWD_1day'] = df['SNWD_value'].diff(-1) # 1 day snow depth diff
-    dfe['SNWD_3day'] = df['SNWD_value'].diff(-3) # 3 day snow depth diff
-    dfe['PREC_1day'] = df['PREC_value'].diff(-1) # 1 day precip diff
+    dfe['TAVG_yest'] = df['TAVG_value'].shift(1) # avg temp yesterday
+    dfe['SNWD_1day'] = df['SNWD_value'].diff(1) # 1 day snow depth diff
+    dfe['SNWD_3day'] = df['SNWD_value'].diff(3) # 3 day snow depth diff
+    dfe['PREC_1day'] = df['PREC_value'].diff(1) # 1 day precip diff
 
     return dfe
 
@@ -91,17 +91,24 @@ ratings = ['No Rating', 'Low', 'Moderate', 'Considerable', 'High', 'Extreme']
 
 def model_to_date(site_id, state, date):
     ratings = ['No Rating', 'Low', 'Moderate', 'Considerable', 'High', 'Extreme']
-    df,_,_ = get_usda_daily(
+    df = get_usda_daily(
             site_id,
             date - pd.Timedelta('7 days'),
             date,
             state=state)
     engineered = make_engineered_daily(df)
+    datetime = pd.to_datetime(date)
     try:
-        predicted = model.predict([engineered.ix[date],])[0]
+        inputvals = engineered.ix[datetime]
     except KeyError:
-        return 'Unknown'
-    except ValueError:
-        return 'Unknown'
+        print('KeyError for site %s' % site_id)
+        print(engineered[['TAVG_value', 'TAVG_yest', 'SNWD_value', 'SNWD_1day']])
+        return 'Unavailable'
+    try:
+        predicted = model.predict([inputvals,])[0]
+    except ValueError as e:
+        print('ValueError for site %s' % site_id)
+        print(inputvals)
+        return 'Unavailable'
     return ratings[int(predicted)]
 

@@ -19,6 +19,20 @@ host = 'localhost'
 dbname = 'avy'
 db = sa.create_engine('postgres://%s@%s/%s'%(user,host,dbname))
 
+def nearest_snotels(lat, lon, limit=5):
+    # haversine formula. in miles.
+    # http://stackoverflow.com/questions/11112926/how-to-find-nearest-location-using-latitude-and-longitude-from-sql-database
+    fmt = sa.text("""SELECT site_id, site_name, elev,
+    ( 3959 * acos( cos( radians(:lat) ) * cos( radians( lat ) ) * cos( radians( lon )
+    - radians(:lon) ) + sin( radians(:lat) ) * sin( radians( lat ) ) )
+    ) AS distance FROM snotels
+    ORDER BY distance
+    LIMIT :limit;""")
+    #  HAVING distance <= 2500
+    stmt = fmt.bindparams(limit=limit, lat=lat, lon=lon)
+    df = pd.read_sql(stmt, db).set_index('site_id')
+    return df
+
 @app.route('/db')
 def birth_page():
     sql_query = """
@@ -63,12 +77,15 @@ def estimate():
                 lat=form.lat.data,
                 lng=form.lng.data,
                 )
+        print(params)
+        nearby_snotels = nearest_snotels(params['lat'], params['lng'])
         our_estimate = model_to_date(date)
         relevant_nwac = relevant_nwac_reports(date)
         return render_template('result.html', params=params,
                 title = "Estimate for {date}".format(date=date),
                 result = relevant_nwac.to_html(),
-                score=str(our_estimate)
+                score=str(our_estimate),
+                snotels=nearby_snotels.to_html(),
                 )
     return render_template('app.html', form=form, title='Snotelier')
 

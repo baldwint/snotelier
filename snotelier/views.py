@@ -22,7 +22,7 @@ db = sa.create_engine('postgres://%s@%s/%s'%(user,host,dbname))
 def nearest_snotels(lat, lon, limit=5):
     # haversine formula. in miles.
     # http://stackoverflow.com/questions/11112926/how-to-find-nearest-location-using-latitude-and-longitude-from-sql-database
-    fmt = sa.text("""SELECT site_id, site_name, elev,
+    fmt = sa.text("""SELECT site_id, state, site_name, elev,
     ( 3959 * acos( cos( radians(:lat) ) * cos( radians( lat ) ) * cos( radians( lon )
     - radians(:lon) ) + sin( radians(:lat) ) * sin( radians( lat ) ) )
     ) AS distance FROM snotels
@@ -78,11 +78,15 @@ def estimate():
                 lng=form.lng.data,
                 )
         nearby_snotels = nearest_snotels(params['lat'], params['lng'])
-        our_estimate = model_to_date(651, 'OR', date)
-        relevant_nwac = relevant_nwac_reports(date)
+        estimates = []
+        for site_id,state in nearby_snotels['state'].iteritems():
+            our_estimate = model_to_date(site_id, state, date)
+            estimates.append(our_estimate)
+        nearby_snotels['rating'] = estimates
+        #relevant_nwac = relevant_nwac_reports(date)
         return render_template('result.html', params=params,
                 title = "Estimate for {date}".format(date=date),
-                result = relevant_nwac.to_html(),
+                #result = relevant_nwac.to_html(),
                 score=str(our_estimate),
                 snotels=nearby_snotels.to_html(),
                 )

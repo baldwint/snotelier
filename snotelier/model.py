@@ -99,6 +99,8 @@ def model_to_date(site_id, state, date):
     engineered = make_engineered_daily(df)
     try:
         predicted = model.predict([engineered.ix[date],])[0]
+    except KeyError:
+        return 'Unknown'
     except ValueError:
         return 'Unknown'
     return ratings[int(predicted)]

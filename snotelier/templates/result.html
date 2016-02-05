@@ -10,6 +10,7 @@
             <th>Distance (miles)</th>
             <th>Elevation (feet)</th>
             <th>Danger Estimate</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -19,6 +20,7 @@
             <td>{{row.distance|round(1)}}</td>
             <td>{{row.elev}}</td>
             <td class="lead {{row.rating|lower}}">{{row.rating|lower}}</td>
+            <td><a href="{{url_for('plotsite', date=params.date, state=row.state, site_id=row.Index)}}">plot</a></td>
         </tr>
         {% endfor %}
     </tbody>

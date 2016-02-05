@@ -1,0 +1,22 @@
+{% extends "app.html" %}
+
+{% block scripts %}
+{{super()}}
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+<script>
+jQuery.getJSON("{{url_for('plotdata', **request.args)}}",
+        function (dic) {
+            console.log(dic);
+            var data = dic['children'];
+            console.log(data);
+            Plotly.newPlot('plot', data);
+        });
+</script>
+{% endblock %}
+
+{% block page %}
+<a href="{{url_for('plotdata', **request.args)}}">hello world</a>
+
+<div id="plot" style="width: 480px; height: 400px;"></div>
+{% endblock page %}

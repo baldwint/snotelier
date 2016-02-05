@@ -11,9 +11,10 @@ import pandas as pd
 import io
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
-from flask import make_response
+from flask import make_response, url_for, jsonify
 
 from .model import get_usda_daily, model_to_date
+from .usda_hourly import get_usda_hourly
 
 user = 'tkb'
 host = 'localhost'
@@ -95,6 +96,32 @@ def estimate():
                 #snotel_table=nearby_snotels.to_html(),
                 )
     return render_template('input.html', form=form, title='Snotelier')
+
+def make_datapackage(df):
+    data = []
+    for col in ['WTEQ_value', 'SNWD_value']:
+        series = df[col]
+        x = [str(dt) for dt in series.index]
+        y = [float(v) for v in series.values]
+        dic = dict(x=x, y=y, type='scatter')
+        data.append(dic)
+    return dict(children=data)
+
+@app.route('/plotdata.json')
+def plotdata():
+    site_id = request.args.get('site_id', 651)
+    state = request.args.get('state', 'OR')
+    date = request.args.get('date', datetime.date.today())
+    date = pd.to_datetime(date)
+    start = date - pd.Timedelta('7 days')
+    df = get_usda_hourly(site_id, start, date, state)
+    #return df.to_html()
+    return jsonify(make_datapackage(df))
+
+@app.route('/plotsite')
+def plotsite():
+    #return url_for('plotdata', **request.args)
+    return render_template('plotsite.html')
 
 def arrange_plot(aw, ah, n=1):
     w,h = aw+1, ah+1

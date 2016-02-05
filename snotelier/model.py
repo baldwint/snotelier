@@ -2,19 +2,20 @@ import pandas as pd
 import io
 import requests
 import datetime
+import os
 
 from .usda_daily import get_usda_daily
 from .engineered_daily import make_engineered_daily
 
 from sklearn.externals import joblib
 
+this_dir, this_filename = os.path.split(__file__)
+DATA_PATH = os.path.join(this_dir, "data", "filename.pkl")
 
 ratings = ['No Rating', 'Low', 'Moderate', 'Considerable', 'High', 'Extreme']
 
 def model_to_date(site_id, state, date):
-    model = joblib.load('filename.pkl') # filename is relative to run.py
-                                        # this shouldn't be hardcoded,
-                                        # but life is short
+    model = joblib.load(DATA_PATH)
     ratings = ['No Rating', 'Low', 'Moderate', 'Considerable', 'High', 'Extreme']
     df = get_usda_daily(
             site_id,

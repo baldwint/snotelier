@@ -1,6 +1,7 @@
 import pandas as pd
 import io
 import requests
+import datetime
 
 from sklearn.externals import joblib
 model = joblib.load('filename.pkl') # filename is relative to run.py
@@ -97,9 +98,16 @@ def model_to_date(site_id, state, date):
             date,
             state=state)
     engineered = make_engineered_daily(df)
-    datetime = pd.to_datetime(date)
+    dt = pd.to_datetime(date)
+    # brutal hack: temperature averages are not available until the
+    # end of the day, and then the relevant row will contain NaN.
+    # this means that it's impossible to get a danger rating for
+    # the current day. So, get yesterday's.
+    if date == datetime.date.today():
+        dt -= pd.Timedelta('1 day')
+    # end brutal hack. need a better model!
     try:
-        inputvals = engineered.ix[datetime]
+        inputvals = engineered.ix[dt]
     except KeyError:
         print('KeyError for site %s' % site_id)
         print(engineered[['TAVG_value', 'TAVG_yest', 'SNWD_value', 'SNWD_1day']])

@@ -12,7 +12,8 @@ import io
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
 from flask import make_response, url_for
-import simplejson
+import json
+from plotly.utils import PlotlyJSONEncoder
 
 from .model import get_usda_daily, model_to_date
 from .usda_hourly import get_usda_hourly
@@ -122,7 +123,8 @@ def plotdata():
     print('got usda data')
     print(df.isnull().any())
     #return df.to_html()
-    output = simplejson.dumps(make_datapackage(df))
+    output = json.dumps(make_datapackage(df),
+            cls=PlotlyJSONEncoder)
     response = make_response(output)
     response.mimetype = 'application/json'
     return response

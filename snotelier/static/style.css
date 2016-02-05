@@ -8,8 +8,6 @@ body {
 
 #map { height: 400px; width:100%;}
 
-.score { border : 1px solid black; }
-
 .low {background-color: green; }
 .moderate {background-color: yellow; }
 .considerable {background-color: orange; }

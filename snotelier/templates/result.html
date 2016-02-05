@@ -1,12 +1,32 @@
- {% extends "base.html" %}
- {% block body %}
-<h1>Mt. Hood Conditions estimate for {{params.date}}</h1>
-<p>You clicked {{params.lat}} and {{params.lng}}</p>
-<p>Our estimate:</p>
-<h1 class="score {{score|lower}}">{{score}}</h1>
-<p>Nearby snotels:</p>
-{{snotels|safe}}
-{# <p>NWAC reports for this time period:</p>
+ {% extends "app.html" %}
+ {% block page %}
+<h1>Conditions Estimate for {{params.date}}</h1>
+<p class="lead">You clicked {{params.lat|round(4)}} and {{params.lng|round(4)}}</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>SNOTEL site</th>
+            <th>Distance (miles)</th>
+            <th>Elevation (feet)</th>
+            <th>Danger Estimate</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in snotels %}
+        <tr>
+            <td><a href="http://wcc.sc.egov.usda.gov/nwcc/site?sitenum={{row.Index}}">{{row.site_name}}</a></td>
+            <td>{{row.distance|round(1)}}</td>
+            <td>{{row.elev}}</td>
+            <td class="lead {{row.rating|lower}}">relatively {{row.rating|lower}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{# <p>Nearby snotels:</p>
+{{snotel_table|safe}}
+<p>NWAC reports for this time period:</p>
 {{result|safe}}
 <p>raw data for this time period:</p>
 <img src="usda-{{params.date}}.png"/> #}

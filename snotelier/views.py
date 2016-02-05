@@ -84,11 +84,13 @@ def estimate():
             estimates.append(our_estimate)
         nearby_snotels['rating'] = estimates
         #relevant_nwac = relevant_nwac_reports(date)
+        print(list(nearby_snotels.itertuples()))
         return render_template('result.html', params=params,
                 title = "Estimate for {date}".format(date=date),
                 #result = relevant_nwac.to_html(),
-                score=str(our_estimate),
-                snotels=nearby_snotels.to_html(),
+                #score=str(our_estimate),
+                snotels=list(nearby_snotels.itertuples()),
+                #snotel_table=nearby_snotels.to_html(),
                 )
     return render_template('input.html', form=form, title='Snotelier')
 

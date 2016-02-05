@@ -1,6 +1,12 @@
-html, body {height: 100%; margin: 0; padding: 0; }
-#map { height: 100%; width:50%; float: right;}
-.left { float: left; padding: 50px;}
+body {
+  padding-top: 50px;
+}
+.starter-template {
+  padding: 40px 15px;
+  text-align: center;
+}
+
+#map { height: 600px; width:600px;}
 
 .score { border : 1px solid black; }
 

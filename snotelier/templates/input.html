@@ -8,14 +8,12 @@
 
 <div id="map"></div>
 
-<form method=post action="/result">
-  <dl>
+<form class="form-inline" role="form" method="post" action="/result">
       {# {{ render_field(form.username) }} #}
     {{ render_field(form.date) }}
     {{ render_field(form.lat) }}
     {{ render_field(form.lng) }}
-  </dl>
-  <p><input type=submit value=Estimate>
+    <button type="submit" class="btn btn-default">Estimate</button>
 </form>
 
 <p>Snotelier issues automated avalanche danger advisories for

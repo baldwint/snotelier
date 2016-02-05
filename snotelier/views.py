@@ -90,7 +90,7 @@ def estimate():
                 score=str(our_estimate),
                 snotels=nearby_snotels.to_html(),
                 )
-    return render_template('app.html', form=form, title='Snotelier')
+    return render_template('input.html', form=form, title='Snotelier')
 
 def arrange_plot(aw, ah, n=1):
     w,h = aw+1, ah+1

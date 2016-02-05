@@ -4,7 +4,7 @@ def make_engineered_daily(df):
 
     current = temps + [
         'SNWD_value', 'WTEQ_value',
-        'PREC_pctOfMedian_1981', #'WTEQ_pctOfMedian_1981'
+        #'PREC_pctOfMedian_1981', #'WTEQ_pctOfMedian_1981'
     ]
 
     dfe = df[current]

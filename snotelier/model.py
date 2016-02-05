@@ -7,14 +7,14 @@ from .usda_daily import get_usda_daily
 from .engineered_daily import make_engineered_daily
 
 from sklearn.externals import joblib
-model = joblib.load('filename.pkl') # filename is relative to run.py
-                                    # this shouldn't be hardcoded,
-                                    # but life is short
 
 
 ratings = ['No Rating', 'Low', 'Moderate', 'Considerable', 'High', 'Extreme']
 
 def model_to_date(site_id, state, date):
+    model = joblib.load('filename.pkl') # filename is relative to run.py
+                                        # this shouldn't be hardcoded,
+                                        # but life is short
     ratings = ['No Rating', 'Low', 'Moderate', 'Considerable', 'High', 'Extreme']
     df = get_usda_daily(
             site_id,

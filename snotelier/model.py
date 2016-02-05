@@ -34,7 +34,7 @@ def model_to_date(site_id, state, date):
         inputvals = engineered.ix[dt]
     except KeyError:
         print('KeyError for site %s' % site_id)
-        print(engineered[['TAVG_value', 'TAVG_yest', 'SNWD_value', 'SNWD_1day']])
+        print(engineered)
         return 'Unavailable'
     try:
         predicted = model.predict([inputvals,])[0]

@@ -3,7 +3,7 @@ def make_engineered_daily(df):
     temps = ['TMAX_value', 'TMIN_value', 'TAVG_value',]
 
     current = temps + [
-        'SNWD_value', 'WTEQ_value',
+        #'SNWD_value', 'WTEQ_value',
         #'PREC_pctOfMedian_1981', #'WTEQ_pctOfMedian_1981'
     ]
 

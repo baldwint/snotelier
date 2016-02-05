@@ -110,5 +110,5 @@ def model_to_date(site_id, state, date):
         print('ValueError for site %s' % site_id)
         print(inputvals)
         return 'Unavailable'
-    return ratings[int(predicted)]
+    return 'Relatively ' + ratings[int(predicted)]
 

@@ -18,7 +18,7 @@
             <td><a href="http://wcc.sc.egov.usda.gov/nwcc/site?sitenum={{row.Index}}">{{row.site_name}}</a></td>
             <td>{{row.distance|round(1)}}</td>
             <td>{{row.elev}}</td>
-            <td class="lead {{row.rating|lower}}">relatively {{row.rating|lower}}</td>
+            <td class="lead {{row.rating|lower}}">{{row.rating|lower}}</td>
         </tr>
         {% endfor %}
     </tbody>

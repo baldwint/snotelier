@@ -2,6 +2,7 @@ from snotelier import app
 from flask import render_template, request
 import wtforms
 from wtforms.fields.html5 import DateField
+import datetime
 
 import sqlalchemy as sa
 import pandas as pd
@@ -45,7 +46,8 @@ def birth_page():
 class TheForm(wtforms.Form):
     #username = wtforms.TextField('Username',
     #        [wtforms.validators.Length(min=4, max=25)])
-    date = DateField('Date', format='%Y-%m-%d')
+    date = DateField('Date', format='%Y-%m-%d',
+            default=datetime.date.today())
     lat = wtforms.FloatField('Lat', id='lat')
     lng = wtforms.FloatField('Lng', id='lng')
 

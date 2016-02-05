@@ -16,7 +16,8 @@ jQuery.getJSON("{{url_for('plotdata', **request.args)}}",
 {% endblock %}
 
 {% block page %}
-<a href="{{url_for('plotdata', **request.args)}}">hello world</a>
+<h1>Raw Data for Site {{site_id}} on {{date}}</h1>
+<a href="http://wcc.sc.egov.usda.gov/nwcc/site?sitenum={{site_id}}">source</a>
 
-<div id="plot" style="width: 480px; height: 400px;"></div>
+<div id="plot" style="width: 100%; height: 600px;"></div>
 {% endblock page %}

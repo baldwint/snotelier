@@ -99,11 +99,11 @@ def estimate():
 
 def make_datapackage(df):
     data = []
-    for col in ['WTEQ_value', 'SNWD_value']:
+    for col in ['WTEQ_value', 'SNWD_value', 'PREC_value', 'TOBS_value']:
         series = df[col]
         x = [str(dt) for dt in series.index]
         y = [float(v) for v in series.values]
-        dic = dict(x=x, y=y, type='scatter')
+        dic = dict(x=x, y=y, type='scatter', name=col)
         data.append(dic)
     return dict(children=data)
 
@@ -120,8 +120,9 @@ def plotdata():
 
 @app.route('/plotsite')
 def plotsite():
-    #return url_for('plotdata', **request.args)
-    return render_template('plotsite.html')
+    site_id = request.args.get('site_id', '')
+    date = request.args.get('date')
+    return render_template('plotsite.html', site_id=site_id, date=date)
 
 def arrange_plot(aw, ah, n=1):
     w,h = aw+1, ah+1

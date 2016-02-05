@@ -3,8 +3,11 @@
  {% block body %}
 
 <div class="left">
-<h1>Mt. Hood Avalanche condition</h1>
-<p class="lead">Select a date for which to estimate avalanche warning</p>
+<h1>Avalanche Danger Estimator</h1>
+<p class="lead">Select a location for which to estimate avalanche danger</p>
+
+<div id="map"></div>
+
 <form method=post action="/result">
   <dl>
       {# {{ render_field(form.username) }} #}
@@ -15,14 +18,10 @@
   <p><input type=submit value=Estimate>
 </form>
 
-<p>In the future:</p>
-<ul>
-    <li>Map widget (select locations besides mount hood)</li>
-    <li>More accurate results</li>
-</ul>
+<p>Snotelier issues automated avalanche danger advisories for
+Washington and Oregon based on data from the USDA SNOTEL network.</p>
 </div>
 
-<div class="right" id="map"></div>
     <script type="text/javascript">
 
 var map;

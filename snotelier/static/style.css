@@ -6,7 +6,7 @@ body {
   text-align: center;
 }
 
-#map { height: 600px; width:600px;}
+#map { height: 400px; width:100%;}
 
 .score { border : 1px solid black; }
 

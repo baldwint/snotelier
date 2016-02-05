@@ -11,7 +11,8 @@ import pandas as pd
 import io
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
-from flask import make_response, url_for, jsonify
+from flask import make_response, url_for
+import simplejson
 
 from .model import get_usda_daily, model_to_date
 from .usda_hourly import get_usda_hourly
@@ -121,7 +122,10 @@ def plotdata():
     print('got usda data')
     print(df.isnull().any())
     #return df.to_html()
-    return jsonify(make_datapackage(df))
+    output = simplejson.dumps(make_datapackage(df))
+    response = make_response(output)
+    response.mimetype = 'application/json'
+    return response
 
 @app.route('/plotsite')
 def plotsite():

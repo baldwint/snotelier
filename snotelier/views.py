@@ -109,12 +109,17 @@ def make_datapackage(df):
 
 @app.route('/plotdata.json')
 def plotdata():
-    site_id = request.args.get('site_id', 651)
-    state = request.args.get('state', 'OR')
-    date = request.args.get('date', datetime.date.today())
+    print('receiving bat signal')
+    site_id = request.args['site_id']
+    print ( request.args)
+    state = request.args['state']
+    date = request.args['date']
     date = pd.to_datetime(date)
     start = date - pd.Timedelta('7 days')
+    print('getting usda data')
     df = get_usda_hourly(site_id, start, date, state)
+    print('got usda data')
+    print(df.isnull().any())
     #return df.to_html()
     return jsonify(make_datapackage(df))
 

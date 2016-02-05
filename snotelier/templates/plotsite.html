@@ -5,7 +5,7 @@
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
 <script>
-jQuery.getJSON("{{url_for('plotdata', **request.args)}}",
+jQuery.getJSON("{{url_for('plotdata', **request.args)|safe}}",
         function (dic) {
             console.log(dic);
             var data = dic['children'];

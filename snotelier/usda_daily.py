@@ -63,4 +63,3 @@ def get_usda_daily(site, range_min, range_max, state='WA'):
     #df['date_utc'] = pd.to_datetime(df['Date'] + ' PST')
     df = df.set_index('datetime_loc').drop('Date', axis=1)
     return df #, collabels, url
-

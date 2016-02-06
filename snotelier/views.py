@@ -7,10 +7,6 @@ import datetime
 import sqlalchemy as sa
 import pandas as pd
 
-# for generating images of plots
-import io
-from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-from matplotlib.figure import Figure
 from flask import make_response, url_for
 import json
 from plotly.utils import PlotlyJSONEncoder
@@ -115,7 +111,9 @@ def plotdata():
     df = get_usda_hourly(site_id, start, date, state)
     print('got usda data')
     print(df.isnull().any())
-    #return df.to_html()
+    # we need to specify PlotlyJSONEncoder, because it emits NaN
+    # values as null instead of NaN (which is invalid JSON)
+    # https://github.com/plotly/plotly.py/issues/202
     output = json.dumps(make_datapackage(df),
             cls=PlotlyJSONEncoder)
     response = make_response(output)

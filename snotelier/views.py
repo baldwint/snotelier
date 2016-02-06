@@ -47,8 +47,6 @@ def birth_page():
     return render_template("blank.html", title='db stuff', content=table)
 
 class TheForm(wtforms.Form):
-    #username = wtforms.TextField('Username',
-    #        [wtforms.validators.Length(min=4, max=25)])
     date = DateField('Date', format='%Y-%m-%d',
             default=datetime.date.today())
     lat = wtforms.FloatField('Lat', id='lat')
@@ -77,7 +75,6 @@ def estimate():
     if request.method == 'POST' and form.validate():
         date = form.date.data
         params = dict(
-                #name=form.username.data,
                 date=date,
                 lat=form.lat.data,
                 lng=form.lng.data,
@@ -93,9 +90,7 @@ def estimate():
         return render_template('result.html', params=params,
                 title = "Estimate for {date}".format(date=date),
                 #result = relevant_nwac.to_html(),
-                #score=str(our_estimate),
                 snotels=list(nearby_snotels.itertuples()),
-                #snotel_table=nearby_snotels.to_html(),
                 )
     return render_template('input.html', form=form, title='Snotelier')
 
@@ -111,9 +106,7 @@ def make_datapackage(df):
 
 @app.route('/plotdata.json')
 def plotdata():
-    print('receiving bat signal')
     site_id = request.args['site_id']
-    print ( request.args)
     state = request.args['state']
     date = request.args['date']
     date = pd.to_datetime(date)

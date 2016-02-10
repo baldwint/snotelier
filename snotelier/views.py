@@ -14,10 +14,11 @@ from plotly.utils import PlotlyJSONEncoder
 from .model import get_usda_daily, model_to_date
 from .usda_hourly import get_usda_hourly
 
-user = 'tkb'
-host = 'localhost'
-dbname = 'avy'
-db = sa.create_engine('postgres://%s@%s/%s'%(user,host,dbname))
+db = sa.create_engine('postgres://%s@%s/%s'
+        % (app.config['PGUSER'],
+           app.config['PGHOST'],
+           app.config['PGDB'],
+           ))
 
 def nearest_snotels(lat, lon, limit=5):
     # haversine formula. in miles.

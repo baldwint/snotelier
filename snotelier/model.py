@@ -30,7 +30,7 @@ def model_to_date(site_id, state, date):
         print('problem engineering features for', date, site_id)
         print(df_raw)
         print(str(e))
-        return 'Unavailable'
+        return 'Unavailable', None
 
     engineered = pd.DataFrame([dict_eng,])
     inputvals = engineered.ix[0]
@@ -39,6 +39,9 @@ def model_to_date(site_id, state, date):
     except ValueError as e:
         print('ValueError for site %s' % site_id)
         print(inputvals)
-        return 'Unavailable'
-    return 'Relatively ' + ratings[int(predicted)]
+        return 'Unavailable', None
+
+    prob = model.predict_proba([inputvals,])[0,1]
+
+    return 'Relatively ' + ratings[int(predicted)], prob
 

@@ -78,10 +78,13 @@ def estimate():
                 )
         nearby_snotels = nearest_snotels(params['lat'], params['lng'])
         estimates = []
+        probas = []
         for site_id,state in nearby_snotels['state'].iteritems():
-            our_estimate = model_to_date(site_id, state, date)
+            our_estimate, our_prob = model_to_date(site_id, state, date)
             estimates.append(our_estimate)
+            probas.append(our_prob)
         nearby_snotels['rating'] = estimates
+        nearby_snotels['probability'] = probas
         #relevant_nwac = relevant_nwac_reports(date)
         print(list(nearby_snotels.itertuples()))
         return render_template('result.html', params=params,

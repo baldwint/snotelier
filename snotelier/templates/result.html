@@ -10,17 +10,17 @@
             <th>Distance (miles)</th>
             <th>Elevation (feet)</th>
             <th>Danger Estimate</th>
-            <th></th>
+            <th>Danger Probability</th>
         </tr>
     </thead>
     <tbody>
         {% for row in snotels %}
         <tr>
-            <td><a href="http://wcc.sc.egov.usda.gov/nwcc/site?sitenum={{row.Index}}">{{row.site_name}}</a></td>
+            <td><a href="{{url_for('plotsite', date=params.date, state=row.state, site_id=row.Index)}}">{{row.site_name}}</a></td>
             <td>{{row.distance|round(1)}}</td>
             <td>{{row.elev}}</td>
             <td class="lead {{row.rating|lower}}">{{row.rating|lower}}</td>
-            <td><a href="{{url_for('plotsite', date=params.date, state=row.state, site_id=row.Index)}}">plot</a></td>
+            <td>{{row.probability|round(2)}}</td>
         </tr>
         {% endfor %}
     </tbody>

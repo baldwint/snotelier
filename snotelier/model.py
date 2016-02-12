@@ -30,6 +30,7 @@ def model_to_date(site_id, state, date):
         print('problem engineering features for', date, site_id)
         print(df_raw)
         print(str(e))
+        return 'Unavailable'
 
     engineered = pd.DataFrame([dict_eng,])
     inputvals = engineered.ix[0]

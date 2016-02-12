@@ -4,39 +4,35 @@ import requests
 import datetime
 import os
 
-from .usda_daily import get_usda_daily
-from .engineered_daily import make_engineered_daily
+from .usda_hourly import get_usda_hourly
+from .engineered import make_engineered_features
 
 from sklearn.externals import joblib
 
+from pandas.core.groupby import DataError
+
 this_dir, this_filename = os.path.split(__file__)
-DATA_PATH = os.path.join(this_dir, "data", "filename.pkl")
+DATA_PATH = os.path.join(this_dir, "data", "LR_hourly.pkl")
 
 ratings = ['No Rating', 'Low', 'Moderate', 'Considerable', 'High', 'Extreme']
 
 def model_to_date(site_id, state, date):
     model = joblib.load(DATA_PATH)
     ratings = ['No Rating', 'Low', 'Moderate', 'Considerable', 'High', 'Extreme']
-    df = get_usda_daily(
+    df_raw = get_usda_hourly(
             site_id,
             date - pd.Timedelta('7 days'),
             date,
             state=state)
-    engineered = make_engineered_daily(df)
-    dt = pd.to_datetime(date)
-    # brutal hack: temperature averages are not available until the
-    # end of the day, and then the relevant row will contain NaN.
-    # this means that it's impossible to get a danger rating for
-    # the current day. So, get yesterday's.
-    if date == datetime.date.today():
-        dt -= pd.Timedelta('1 day')
-    # end brutal hack. need a better model!
     try:
-        inputvals = engineered.ix[dt]
-    except KeyError:
-        print('KeyError for site %s' % site_id)
-        print(engineered)
-        return 'Unavailable'
+        dict_eng = make_engineered_features(df_raw)
+    except (DataError, TypeError) as e:
+        print('problem engineering features for', date, site_id)
+        print(df_raw)
+        print(str(e))
+
+    engineered = pd.DataFrame([dict_eng,])
+    inputvals = engineered.ix[0]
     try:
         predicted = model.predict([inputvals,])[0]
     except ValueError as e:

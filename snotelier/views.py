@@ -11,7 +11,7 @@ from flask import make_response, url_for
 import json
 from plotly.utils import PlotlyJSONEncoder
 
-from .model import get_usda_daily, model_to_date
+from .model import model_to_date
 from .usda_hourly import get_usda_hourly
 
 db = sa.create_engine('postgres://%s@%s/%s'

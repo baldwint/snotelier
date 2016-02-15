@@ -45,7 +45,7 @@ def birth_page():
 
 class TheForm(wtforms.Form):
     date = DateField('Date', format='%Y-%m-%d',
-            default=datetime.date.today())
+            default=datetime.date.today)
     lat = wtforms.FloatField('Lat', id='lat')
     lng = wtforms.FloatField('Lng', id='lng')
 

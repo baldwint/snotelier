@@ -7,7 +7,11 @@ import datetime
 import sqlalchemy as sa
 import pandas as pd
 
-from flask import make_response, url_for
+import markdown
+import io
+from pathlib import Path
+
+from flask import make_response, url_for, Markup
 import json
 from plotly.utils import PlotlyJSONEncoder
 
@@ -40,7 +44,7 @@ def birth_page():
                 SELECT * FROM reports WHERE region='Mt Hood' limit 10;
                 """
     query_results = pd.read_sql_query(sql_query,db)
-    table = query_results.to_html()
+    table = Markup(query_results.to_html())
     return render_template("blank.html", title='db stuff', content=table)
 
 class TheForm(wtforms.Form):
@@ -129,3 +133,11 @@ def plotsite():
     site_id = request.args.get('site_id', '')
     date = request.args.get('date')
     return render_template('plotsite.html', site_id=site_id, date=date)
+
+@app.route('/about')
+def about():
+    thispath = Path(__file__)
+    readme_path = thispath.parent.parent.joinpath("README.md")
+    with io.open(str(readme_path), 'r') as fl:
+        content = Markup(markdown.markdown(fl.read()))
+    return render_template("blank.html", title='About Snotelier', content=content)
